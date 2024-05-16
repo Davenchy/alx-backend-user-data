@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """ log message obfuscated using regex """
-import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from typing import List
 import logging
