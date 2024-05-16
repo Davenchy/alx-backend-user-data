@@ -7,7 +7,7 @@ import logging
 import re
 import os
 
-PII_FIELDS = ('name', 'email' 'phone', 'ssn', 'password')
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(
@@ -28,6 +28,7 @@ def get_logger() -> logging.Logger:
     logger = logging.Logger("user_data", logging.INFO)
     handler = logging.StreamHandler()
     handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    logger.addHandler(handler)
     return logger
 
 
@@ -58,3 +59,22 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self._fields, self.REDACTION, record.msg,
                                   self.SEPARATOR)
         return super().format(record)
+
+
+def main():
+    """ The main program """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    fields = ('name', 'email', 'phone', 'ssn', 'password', 'ip', 'last_login',
+              'user_agent')
+    logger = get_logger()
+    for row in cursor:
+        user = ''.join([f'{k}={v};' for k, v in zip(fields, row)])
+        logger.info(user)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
