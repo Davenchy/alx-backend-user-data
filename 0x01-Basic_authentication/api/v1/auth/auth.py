@@ -16,6 +16,6 @@ class Auth:
         """ get the current request authentication header """
         return None
 
-    def current_user(self, request=None) -> TypeVar['User']:
+    def current_user(self, request=None) -> TypeVar('User'):
         """ get the current user detected by the authentication process """
         return None
