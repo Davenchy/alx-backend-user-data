@@ -2,6 +2,7 @@
 """ Module of BasicAuth
 """
 from typing import Tuple, TypeVar
+
 from .auth import Auth
 from models.user import User
 from base64 import decodebytes
@@ -68,3 +69,11 @@ class BasicAuth(Auth):
             return user
         except Exception:
             return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """ get the current user as provided in the request auth token """
+        token = self.authorization_header(request)
+        token = self.extract_base64_authorization_header(token)
+        token = self.decode_base64_authorization_header(token)
+        email, pwd = self.extract_user_credentials(token)
+        return self.user_object_from_credentials(email, pwd)
