@@ -14,12 +14,20 @@ class Auth:
             return True
         if path[-1] != '/':
             path += '/'
-        if excluded_paths is list:
-            excluded_paths = [
-                p if p[-1] == '/' else f'{p}/'
-                for p in excluded_paths
-            ]
-        return path not in excluded_paths
+
+        for p in excluded_paths:
+            if p[-1] == '*':
+                if path.startswith(p[:-1]):
+                    return False
+                continue
+
+            if p[-1] != '/':
+                p += '/'
+
+            if p == path:
+                return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ get the current request authentication header """
