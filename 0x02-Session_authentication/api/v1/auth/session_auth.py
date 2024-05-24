@@ -15,7 +15,6 @@ class SessionAuth(Auth):
         """ Create a new session for user_id """
         if not user_id or type(user_id) is not str:
             return None
-        
         session_id = uuid4()
         self.user_id_by_session_id[session_id] = user_id
         return session_id
