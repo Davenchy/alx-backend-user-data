@@ -2,7 +2,7 @@
 """ Module of SessionExpAuth
 """
 from os import getenv
-from datetime import datetime
+from datetime import datetime, timedelta
 from .session_auth import SessionAuth
 
 
@@ -50,7 +50,8 @@ class SessionExpAuth(SessionAuth):
             return None
 
         created_at = session['created_at']
-        if datetime.now() > created_at + self.session_duration:
+        expired_at = created_at + timedelta(seconds=self.session_duration)
+        if datetime.now() > expired_at:
             return None
 
         return user_id
