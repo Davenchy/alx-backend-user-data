@@ -41,7 +41,9 @@ class Auth:
         return None
 
     def session_cookie(self, request=None):
-        """  """
+        """ get the session cookie value
+        use the env var SESSION_NAME to set the cookie name
+        the default value of SESSION_NAME is '_my_session_id'"""
         if request is None:
             return None
 
