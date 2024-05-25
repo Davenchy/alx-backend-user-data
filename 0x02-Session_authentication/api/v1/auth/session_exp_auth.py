@@ -35,7 +35,7 @@ class SessionExpAuth(SessionAuth):
     def user_id_for_session_id(self, session_id=None):
         """ get user_id registered for a session using session_id
         """
-        if not session_id or session_id not in self.user_id_by_session_id:
+        if not session_id:
             return None
 
         session = self.user_id_by_session_id.get(session_id)
@@ -46,12 +46,9 @@ class SessionExpAuth(SessionAuth):
         if self.session_duration <= 0:
             return user_id
 
-        if not hasattr(session, 'created_at'):
+        if 'created_at' not in session:
             return None
 
         created_at = session['created_at']
         expired_at = created_at + timedelta(seconds=self.session_duration)
-        if datetime.now() > expired_at:
-            return None
-
-        return user_id
+        return None if expired_at < datetime.now() else user_id
