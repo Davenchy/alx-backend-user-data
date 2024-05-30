@@ -46,3 +46,12 @@ class DB:
         if not row:
             raise NoResultFound
         return row
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ update a user by property/ies value/s """
+        row = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(row, key):
+                raise ValueError
+            setattr(row, key, value)
+        self._session.commit()
