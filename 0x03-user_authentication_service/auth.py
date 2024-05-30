@@ -5,6 +5,7 @@ Auth module
 
 from typing import Optional
 from uuid import uuid4
+from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
@@ -91,8 +92,8 @@ class Auth:
             reset_token = _generate_uuid()
             self._db.update_user(user.id, reset_token=reset_token)
             return reset_token
-        except NoResultFound as exc:
-            raise ValueError from exc
+        except NoResultFound:
+            raise ValueError
 
     def update_password(self, reset_token: str, password: str) -> None:
         """ Reset user's password using reset token
@@ -103,5 +104,5 @@ class Auth:
             self._db.update_user(user.id,
                                  hashed_password=_hash_password(password),
                                  reset_token=None)
-        except NoResultFound as exc:
-            raise ValueError from exc
+        except NoResultFound:
+            raise ValueError
