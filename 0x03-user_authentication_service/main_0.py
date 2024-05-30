@@ -2,6 +2,7 @@
 """
 Main file
 """
+
 from user import User
 
 print(User.__tablename__)
