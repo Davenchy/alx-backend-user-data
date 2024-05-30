@@ -41,7 +41,9 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
-        """ find a user by property/ies value/s """
+        """ find a user by its properties
+        if no user found raises NoResultFound
+        if provided property is invalid raises InvalidRequestError """
         row = self._session.query(User).filter_by(**kwargs).first()
         if not row:
             raise NoResultFound
