@@ -4,7 +4,6 @@ Auth module
 """
 
 from typing import Optional
-from bcrypt import hashpw, gensalt, checkpw
 from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
